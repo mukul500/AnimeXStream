@@ -12,16 +12,8 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 android {
 
-    signingConfigs {
-        release {
-            storeFile file('E:\\Projects\\animexstream.jks')
-            storePassword 'labrador1'
-            keyAlias = 'xblacky'
-            keyPassword 'labrador1'
-        }
-    }
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -41,12 +33,8 @@ android {
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        debug{
-            signingConfig signingConfigs.release
         }
     }
     splits {
@@ -81,7 +69,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 

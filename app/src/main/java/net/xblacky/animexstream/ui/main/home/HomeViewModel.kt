@@ -55,9 +55,17 @@ class HomeViewModel : ViewModel(){
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 Timber.e(snapshot.toString())
+
+                val versionCode = snapshot.child("versionCode").value
+                val whatsNew = snapshot.child("whatsNew").value
+
+                if (versionCode == null && whatsNew == null){
+                    return
+                }
+
                 _updateModel.value = UpdateModel(
-                    versionCode = snapshot.child("versionCode").value as Long,
-                    whatsNew = snapshot.child("whatsNew").value.toString()
+                    versionCode = versionCode as Long,
+                    whatsNew = whatsNew.toString()
                 )
             }
 

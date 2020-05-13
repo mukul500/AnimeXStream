@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Anime X Stream</string>
+    <string name="discover">Telusuri</string>
+    <string name="retry">ulangi</string>
+    <string name="quality_auto" translatable="false">Auto</string>
+    <string name="released">Terbit:</string>
+    <string name="type">Tipe:</string>
+    <string name="status">Status:</string>
+    <string name="next_episode"><u>Episode Selanjutnya</u>&gt;</string>
+    <string name="previous_episode">&lt;<u>Episode Sebelumnya</u></string>
+    <string name="back_button">Tombol Kembali</string>
+    <string name="search">Cari</string>
+    <string name="something_went_wrong">Terjadi Kesalahan</string>
+
+    <string name="no_internet">Tidak Ada Koneksi Internet</string>
+    <string name="favourite">Favorit</string>
+    <string name="status_code_default">Terjadi kesalahan</string>
+    <string name="server_error">Server bermasalaha</string>
+    <string name="added_to_favourites">Anime berhasil ditambah ke favorit</string>
+    <string name="removed_from_favourites">Anime dihapus dari favorit</string>
+    <string name="see_more"><![CDATA[Lihat selengkapnya >]]></string>
+    <string name="video_quality">Kualitas Video</string>
+</resources>
