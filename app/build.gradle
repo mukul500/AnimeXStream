@@ -12,14 +12,14 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 android {
 
-    signingConfigs {
-        release {
-            storeFile file('E:\\Projects\\animexstream.jks')
-            storePassword 'labrador1'
-            keyAlias = 'xblacky'
-            keyPassword 'labrador1'
-        }
-    }
+//    signingConfigs {
+//        release {
+//            storeFile file('E:\\Projects\\animexstream.jks')
+//            storePassword 'labrador1'
+//            keyAlias = 'xblacky'
+//            keyPassword 'labrador1'
+//        }
+//    }
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     compileOptions {
@@ -41,12 +41,12 @@ android {
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug{
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
     }
     splits {

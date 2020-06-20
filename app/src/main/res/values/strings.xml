@@ -3,6 +3,7 @@
     <string name="discover">Browse</string>
     <string name="retry">retry</string>
     <string name="quality_auto" translatable="false">Auto</string>
+    <string name="speed" translatable="false">1x</string>
     <string name="released">Released:</string>
     <string name="type">Type:</string>
     <string name="status">Status:</string>

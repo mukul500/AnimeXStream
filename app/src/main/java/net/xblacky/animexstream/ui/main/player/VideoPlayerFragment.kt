@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -72,6 +73,11 @@ class VideoPlayerFragment : Fragment(), View.OnClickListener, Player.EventListen
     private var isFullScreen = false
     private var isVideoPlaying: Boolean = false
 
+    private val speeds = arrayOf(0.25f, 0.5f, 1f, 1.25f, 1.5f, 2f)
+    private val showableSpeed = arrayOf("0.25x", "0.50x", "1x", "1.25x", "1.50x", "2x")
+    private var checkedItem = 2
+    private var selectedSpeed = 2
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -122,6 +128,7 @@ class VideoPlayerFragment : Fragment(), View.OnClickListener, Player.EventListen
     private fun setClickListeners() {
         rootView.exo_full_Screen.setOnClickListener(this)
         rootView.exo_track_selection_view.setOnClickListener(this)
+        rootView.exo_speed_selection_view.setOnClickListener(this)
         rootView.errorButton.setOnClickListener(this)
         rootView.back.setOnClickListener(this)
         rootView.nextEpisode.setOnClickListener(this)
@@ -196,6 +203,9 @@ class VideoPlayerFragment : Fragment(), View.OnClickListener, Player.EventListen
         when (v?.id) {
             R.id.exo_track_selection_view -> {
                 showDialog()
+            }
+            R.id.exo_speed_selection_view -> {
+                showDialogForSpeedSelection()
             }
             R.id.exo_full_Screen -> {
                 toggleFullView()
@@ -338,8 +348,46 @@ class VideoPlayerFragment : Fragment(), View.OnClickListener, Player.EventListen
             ).build().show()
         } catch (ignored: java.lang.NullPointerException) {
         }
+    }
 
+    // set playback speed for exoplayer
+    private fun setPlaybackSpeed(speed: Float) {
+        val params: PlaybackParameters = PlaybackParameters(speed)
+        player.playbackParameters = params
+    }
 
+    // set the speed, selectedItem and change the text
+    private fun setSpeed(speed: Int) {
+        selectedSpeed = speed
+        checkedItem = speed
+        exo_speed_selection_view.text = showableSpeed[speed]
+    }
+
+    // show dialog to select the speed.
+    private fun showDialogForSpeedSelection() {
+        val builder = AlertDialog.Builder(context!!)
+        builder.apply {
+            setTitle("Set your playback speed")
+            setSingleChoiceItems(showableSpeed, checkedItem) {_, which ->
+                when (which) {
+                    0 -> setSpeed(0)
+                    1 -> setSpeed(1)
+                    2 -> setSpeed(2)
+                    3 -> setSpeed(3)
+                    4 -> setSpeed(4)
+                    5 -> setSpeed(5)
+                }
+            }
+            setPositiveButton("OK") {dialog, _ ->
+                setPlaybackSpeed(speeds[selectedSpeed])
+                dialog.dismiss()
+            }
+            setNegativeButton("Cancel") {dialog, _ ->
+                dialog.dismiss()
+            }
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
     override fun onTracksChanged(
