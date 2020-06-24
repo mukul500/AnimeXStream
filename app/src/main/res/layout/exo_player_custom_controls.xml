@@ -166,6 +166,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/exo_speed_selection_view"
+        app:layout_constraintEnd_toStartOf="@id/exo_track_selection_view"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/media_player_controls"
+        android:text="@string/speed"
+        android:layout_marginEnd="10dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:textStyle="bold"
+        android:paddingTop="20dp"
+        android:paddingStart="20dp"
+        android:paddingBottom="20dp"
+        android:paddingEnd="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/exo_track_selection_view"
         app:layout_constraintEnd_toStartOf="@id/exo_full_Screen"
         app:layout_constraintTop_toTopOf="parent"

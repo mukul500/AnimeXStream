@@ -16,8 +16,7 @@ class HtmlParser {
         fun parseRecentSubOrDub(response: String, typeValue: Int) :ArrayList<AnimeMetaModel> {
             val animeMetaModelList: ArrayList<AnimeMetaModel> = ArrayList()
             val document = Jsoup.parse(response)
-            val lists = document.getElementsByClass("items").first().select("li")
-            Timber.e("Hello")
+            val lists = document?.getElementsByClass("items")?.first()?.select("li")
             var i = 0
             lists?.forEach { anime ->
                 val animeInfo = anime.getElementsByClass("name").first().select("a")
@@ -48,11 +47,11 @@ class HtmlParser {
         fun parsePopular(response: String, typeValue: Int) : ArrayList<AnimeMetaModel>{
             val animeMetaModelList: ArrayList<AnimeMetaModel> = ArrayList()
             val document = Jsoup.parse(response)
-            val lists = document.getElementsByClass("added_series_body popular").first().select("ul").first().select("li")
+            val lists = document?.getElementsByClass("added_series_body popular")?.first()?.select("ul")?.first()?.select("li")
             Timber.e("POPULAR\n\n\n")
             var i=0
 
-            lists.forEach {anime->
+            lists?.forEach {anime->
 
                 val animeInfoFirst = anime.select("a").first()
                 val imageDiv = animeInfoFirst.getElementsByClass("thumbnail-popular").first().attr("style").toString()
@@ -90,7 +89,8 @@ class HtmlParser {
         fun parseMovie(response: String, typeValue: Int) : ArrayList<AnimeMetaModel>{
             val animeMetaModelList: ArrayList<AnimeMetaModel> = ArrayList()
             val document = Jsoup.parse(response)
-            val lists = document.getElementsByClass("items").first().select("li")
+            Timber.e("LOGCAT "+ response)
+            val lists = document?.getElementsByClass("items")?.first()?.select("li")
             var i = 0
             lists?.forEach {
                 val movieInfo = it.select("a").first()
@@ -121,13 +121,13 @@ class HtmlParser {
             val animeInfo = document.getElementsByClass("anime_info_body_bg")
             val animeUrl = animeInfo.select("img").first().absUrl("src")
             val animeTitle = animeInfo.select("h1").first().text()
-            val lists = document.getElementsByClass("type")
+            val lists = document?.getElementsByClass("type")
             lateinit var type: String
             lateinit var releaseTime: String
             lateinit var status: String
             lateinit var plotSummary: String
             val genre: ArrayList<GenreModel> = ArrayList()
-            lists.forEachIndexed { index, element ->
+            lists?.forEachIndexed { index, element ->
                 when(index){
                     0-> type = element.text()
                     1-> plotSummary = element.text()
@@ -159,8 +159,8 @@ class HtmlParser {
         fun parseMediaUrl(response: String): EpisodeInfo{
             val mediaUrl: String?
             val document = Jsoup.parse(response)
-            val info = document.getElementsByClass("anime").first().select("a")
-            mediaUrl = info.attr("data-video").toString()
+            val info = document?.getElementsByClass("anime")?.first()?.select("a")
+            mediaUrl = info?.attr("data-video").toString()
 //            mediaUrl = mediaUrl.replace("load", "streaming")
             val nextEpisodeUrl = document.getElementsByClass("anime_video_body_episodes_r")?.select("a")?.first()?.attr("href")
             val previousEpisodeUrl = document.getElementsByClass("anime_video_body_episodes_l")?.select("a")?.first()?.attr("href")
@@ -175,7 +175,7 @@ class HtmlParser {
         fun parseM3U8Url(response: String): String?{
             var m3u8Url: String?= ""
             val document = Jsoup.parse(response)
-            val info = document.getElementsByClass("videocontent")
+            val info = document?.getElementsByClass("videocontent")
             val pattern = Pattern.compile(C.M3U8_REGEX_PATTERN)
             val matcher = pattern.matcher(info.toString())
             return try{
@@ -196,8 +196,8 @@ class HtmlParser {
         fun fetchEpisodeList(response: String): ArrayList<EpisodeModel>{
             val episodeList = ArrayList<EpisodeModel>()
             val document = Jsoup.parse(response)
-            val lists = document.select("li")
-            lists.forEach {
+            val lists = document?.select("li")
+            lists?.forEach {
                 val episodeUrl = it.select("a").first().attr("href").trim()
                 val episodeNumber = it.getElementsByClass("name").first().text()
                 val episodeType = it.getElementsByClass("cate").first().text()
@@ -243,9 +243,16 @@ class HtmlParser {
         }
 
         private fun getCategoryUrl(url: String): String {
-            var categoryUrl =  url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'))
-            categoryUrl = "/category/$categoryUrl"
-            return categoryUrl
+            return try{
+                var categoryUrl =  url.substring(url.lastIndexOf('/') + 1, url.lastIndexOf('.'))
+                categoryUrl = "/category/$categoryUrl"
+                categoryUrl
+            }catch (exception: StringIndexOutOfBoundsException){
+                Timber.e("Image URL: $url")
+                ""
+
+            }
+
         }
 
     }

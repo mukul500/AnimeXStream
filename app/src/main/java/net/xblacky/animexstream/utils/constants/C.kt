@@ -53,8 +53,8 @@ class C {
 
         //Network Requests Header
         const val USER_AGENT = "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
-        const val ORIGIN = "origin: https://www16.gogoanime.io"
-        const val REFERER = "referer: https://www16.gogoanime.io/"
+        const val ORIGIN = "origin: https://www.gogoanime.io"
+        const val REFERER = "referer: https://www.gogoanime.io/"
 
         //Realm
         const val MAX_TIME_M3U8_URL = 2 * 60 * 60 *1000

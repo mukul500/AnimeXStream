@@ -25,7 +25,7 @@ public class RetrofitHelper {
 
         if(BuildConfig.DEBUG){
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             client = new OkHttpClient.Builder()
                     .retryOnConnectionFailure(true)
                     .addInterceptor(interceptor)
