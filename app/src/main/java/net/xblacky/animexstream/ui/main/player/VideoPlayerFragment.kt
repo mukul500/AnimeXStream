@@ -1,6 +1,8 @@
 package net.xblacky.animexstream.ui.main.player
 
 import android.content.Context
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.net.Uri
@@ -22,8 +24,6 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
-import com.google.android.exoplayer2.source.dash.DashMediaSource
-import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
 import com.google.android.exoplayer2.source.hls.HlsDataSourceFactory
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.trackselection.*
@@ -72,6 +72,7 @@ class VideoPlayerFragment : Fragment(), View.OnClickListener, Player.EventListen
     private lateinit var handler: Handler
     private var isFullScreen = false
     private var isVideoPlaying: Boolean = false
+    private var canRotate: Boolean = false
 
     private val speeds = arrayOf(0.25f, 0.5f, 1f, 1.25f, 1.5f, 2f)
     private val showableSpeed = arrayOf("0.25x", "0.50x", "1x", "1.25x", "1.50x", "2x")
@@ -133,6 +134,7 @@ class VideoPlayerFragment : Fragment(), View.OnClickListener, Player.EventListen
         rootView.back.setOnClickListener(this)
         rootView.nextEpisode.setOnClickListener(this)
         rootView.previousEpisode.setOnClickListener(this)
+        rootView.exo_orientation_selection.setOnClickListener(this)
     }
 
     private fun buildMediaSource(uri: Uri): MediaSource {
@@ -222,7 +224,39 @@ class VideoPlayerFragment : Fragment(), View.OnClickListener, Player.EventListen
             R.id.previousEpisode -> {
                 playPreviousEpisode()
             }
+            R.id.exo_orientation_selection -> {
+                toggleOrientation()
+            }
         }
+    }
+
+    private fun toggleOrientation() {
+        if (canRotate) {
+            // Disable rotation
+            context?.let {
+                exo_orientation_selection.setImageDrawable(
+                    ContextCompat.getDrawable(it,
+                        R.drawable.ic_lock_rotation)
+                )
+            }
+            // Lock current orientation
+            if(this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                activity?.requestedOrientation =  ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT
+            } else {
+                activity?.requestedOrientation =  ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            }
+        } else {
+            // Enable rotation
+            context?.let {
+                exo_orientation_selection.setImageDrawable(
+                    ContextCompat.getDrawable(it,
+                        R.drawable.ic_allow_rotation)
+                )
+            }
+            activity?.requestedOrientation =  ActivityInfo.SCREEN_ORIENTATION_SENSOR
+        }
+        // Invert value
+        canRotate = !canRotate
     }
 
 
