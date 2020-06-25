@@ -278,8 +278,15 @@ class VideoPlayerFragment : Fragment(), View.OnClickListener, Player.EventListen
         } else {
             exoPlayerFrameLayout.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
             exoPlayerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-            player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
-            isFullScreen = true
+//            player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
+
+            if (player.videoScalingMode == C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING) {
+                player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT
+                isFullScreen = true
+            } else {
+                player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
+            }
+
             context?.let {
                 exo_full_Screen.setImageDrawable(
                     ContextCompat.getDrawable(
