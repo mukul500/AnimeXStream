@@ -8,24 +8,6 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/exo_orientation_selection"
-        android:paddingStart="10dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="16dp"
-        android:background="?selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_lock_rotation"
-        app:layout_constraintTop_toBottomOf="@id/back"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/back"
         android:padding="10dp"
         android:background="?selectableItemBackground"
