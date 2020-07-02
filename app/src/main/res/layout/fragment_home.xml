@@ -57,7 +57,7 @@
         android:layout_marginEnd="5dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/favorite"
-        android:src="@drawable/ic_search"
+        android:src="@drawable/ic_baseline_brightness_3_24"
         android:background="?selectableItemBackgroundBorderless"
         android:clickable="true"
         app:layout_constraintBottom_toTopOf="@id/shadowLayout"
