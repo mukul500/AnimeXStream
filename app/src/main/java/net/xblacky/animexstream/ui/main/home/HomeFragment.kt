@@ -19,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
-import kotlinx.android.synthetic.main.fragment_home.view.darkMode
 import net.xblacky.animexstream.BuildConfig
 import net.xblacky.animexstream.MainActivity
 import net.xblacky.animexstream.R
@@ -77,8 +76,6 @@ class HomeFragment : Fragment(), View.OnClickListener, HomeController.EpoxyAdapt
     private fun setClickListeners() {
         rootView.header.setOnClickListener(this)
         rootView.search.setOnClickListener(this)
-        rootView.favorite.setOnClickListener(this)
-        rootView.darkMode.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -95,23 +92,6 @@ class HomeFragment : Fragment(), View.OnClickListener, HomeController.EpoxyAdapt
             R.id.search -> {
                 findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSearchFragment())
             }
-            R.id.favorite -> {
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToFavouriteFragment())
-            }
-
-            R.id.darkMode -> {
-                toggleModes()
-            }
-        }
-    }
-
-    private fun toggleModes() {
-        if ((activity as MainActivity).resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            Toast.makeText(context, "Light Mode", Toast.LENGTH_SHORT).show()
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            Toast.makeText(context, "Night Mode", Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -10,6 +10,9 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
+import kotlinx.android.synthetic.main.main_activity.*
 import timber.log.Timber
 
 
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 //        }
         toggleDayNight()
         setContentView(R.layout.main_activity)
+        bottomNavigationView.setupWithNavController(container.findNavController())
     }
 
     private fun toggleDayNight() {
