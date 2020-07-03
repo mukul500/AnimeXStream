@@ -7,6 +7,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitHelper {
 
@@ -16,7 +17,7 @@ public class RetrofitHelper {
         try {
             RetrofitHelper retrofitHelper = new RetrofitHelper();
         } catch (Exception e) {
-            throw new RuntimeException("Exception occured in creating singleton instance");
+            throw new RuntimeException("Exception occurred in creating singleton instance");
         }
     }
 
@@ -36,13 +37,11 @@ public class RetrofitHelper {
                     .build();
         }
 
-        Retrofit retrofit = new Retrofit.Builder()
+        retrofitInstance = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .baseUrl(C.Companion.getBASE_URL())
-                .build();
-        retrofitInstance = retrofit;
-
+                .addConverterFactory(GsonConverterFactory.create()).build();
     }
 
 

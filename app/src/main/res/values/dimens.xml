@@ -6,4 +6,8 @@
     <dimen name="episode_offset_right">20dp</dimen>
     <dimen name="episode_offset_top">5dp</dimen>
     <dimen name="episode_offset_bottom">5dp</dimen>
+
+    <!-- Suggestions -->
+    <dimen name="suggestions_spacing">10dp</dimen>
+    <dimen name="suggestions_margin">20dp</dimen>
 </resources>

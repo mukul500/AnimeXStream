@@ -123,6 +123,10 @@ dependencies {
     //Expandable TextView
     implementation 'com.ms-square:expandableTextView:0.1.4'
 
+    //POJO
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
     //Navigation Library
     def nav_version = "2.3.0-alpha04"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"

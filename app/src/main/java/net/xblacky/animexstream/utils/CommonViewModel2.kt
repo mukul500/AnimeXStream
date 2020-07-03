@@ -20,6 +20,10 @@ open class CommonViewModel2 : ViewModel(){
     private var errorCode: Int = C.ERROR_CODE_DEFAULT
     private var errorMsgId = R.string.something_went_wrong
 
+    init {
+        _loadingModel.postValue(null)
+    }
+
     private  fun updateErrorModel(e: Throwable?) {
         e?.let {
             if (e is HttpException) {
@@ -50,7 +54,6 @@ open class CommonViewModel2 : ViewModel(){
             errorMsg = errorMsgId,
             isListEmpty = isListEmpty
         )
-
     }
     enum class Loading{
         LOADING, COMPLETED, ERROR

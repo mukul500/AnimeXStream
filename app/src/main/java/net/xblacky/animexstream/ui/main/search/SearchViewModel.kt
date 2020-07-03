@@ -2,25 +2,36 @@ package net.xblacky.animexstream.ui.main.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
-import net.xblacky.animexstream.utils.CommonViewModel
 import net.xblacky.animexstream.utils.CommonViewModel2
 import net.xblacky.animexstream.utils.constants.C
 import net.xblacky.animexstream.utils.model.AnimeMetaModel
+import net.xblacky.animexstream.utils.model.SuggestionModel
 import net.xblacky.animexstream.utils.parser.HtmlParser
 import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Response
 
-class SearchViewModel : CommonViewModel2() {
+class SearchViewModel : CommonViewModel2(), retrofit2.Callback<SuggestionModel> {
 
     private val searchRepository = SearchRepository()
     private var _searchList: MutableLiveData<ArrayList<AnimeMetaModel>> = MutableLiveData()
+    private var _suggestionsList: MutableLiveData<ArrayList<String>> = MutableLiveData()
     private var pageNumber: Int = 1
     private lateinit var keyword: String
     private var _canNextPageLoaded = true
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
+
     var searchList: LiveData<ArrayList<AnimeMetaModel>> = _searchList
+    var suggestionsList: LiveData<ArrayList<String>> = _suggestionsList
+
+    fun fetchSuggestionsList(keyword: String) {
+        val list = _suggestionsList.value
+        list?.clear()
+        _suggestionsList.value = list
+        searchRepository.fetchSearchSuggestions(keyword).enqueue(this)
+    }
 
     fun fetchSearchList(keyword: String) {
         pageNumber = 1
@@ -49,8 +60,6 @@ class SearchViewModel : CommonViewModel2() {
             )
             updateLoadingState(loading = Loading.LOADING, e = null, isListEmpty = isListEmpty())
         }
-
-
     }
 
     private fun getSearchObserver(searchType: Int): DisposableObserver<ResponseBody> {
@@ -92,6 +101,15 @@ class SearchViewModel : CommonViewModel2() {
 
     private fun isListEmpty(): Boolean{
         return _searchList.value.isNullOrEmpty()
+    }
+
+    override fun onFailure(call: Call<SuggestionModel>, t: Throwable) {}
+
+    override fun onResponse(call: Call<SuggestionModel>, response: Response<SuggestionModel>) {
+        response.body()?.content?.let {
+            val list = HtmlParser.parseSuggestions(it)
+            _suggestionsList.value = list
+        }
     }
 
 }

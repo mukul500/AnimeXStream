@@ -1,9 +1,6 @@
 package net.xblacky.animexstream.ui.main.search
 
 import android.content.Context
-import android.content.res.Configuration
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -19,23 +16,31 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import net.xblacky.animexstream.utils.connectivity.base.ConnectivityProvider
 import kotlinx.android.synthetic.main.fragment_search.view.*
 import kotlinx.android.synthetic.main.loading.view.*
 import net.xblacky.animexstream.R
+import net.xblacky.animexstream.ui.main.search.adapter.SuggestionsAdapter
 import net.xblacky.animexstream.ui.main.search.epoxy.SearchController
 import net.xblacky.animexstream.utils.CommonViewModel2
 import net.xblacky.animexstream.utils.ItemOffsetDecoration
 import net.xblacky.animexstream.utils.Utils
 import net.xblacky.animexstream.utils.model.AnimeMetaModel
-import timber.log.Timber
 
 
 class SearchFragment : Fragment(), View.OnClickListener,
-    SearchController.EpoxySearchAdapterCallbacks {
+    SuggestionsAdapter.SuggestionsFilter.SuggestionAdapterCallbacks,
+    SearchController.EpoxySearchAdapterCallbacks, ConnectivityProvider.ConnectivityStateListener {
+
+    private val provider: ConnectivityProvider by lazy { ConnectivityProvider.createProvider(this.requireContext()) }
 
     private lateinit var rootView: View
     private lateinit var viewModel: SearchViewModel
     private lateinit var searchController: SearchController
+    private lateinit var suggestionsAdapter: SuggestionsAdapter
+
+    private var isNetworkAvailable = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,9 +50,32 @@ class SearchFragment : Fragment(), View.OnClickListener,
         setOnClickListeners()
         setAdapters()
         setRecyclerViewScroll()
+        configureEditText()
         setEditTextListener()
-        showKeyBoard()
         return rootView
+    }
+
+    override fun onStart() {
+        super.onStart()
+        provider.addListener(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        provider.removeListener(this)
+    }
+
+    override fun onStateChange(state: ConnectivityProvider.NetworkState) {
+        isNetworkAvailable = state.hasInternet()
+    }
+
+    private fun ConnectivityProvider.NetworkState.hasInternet(): Boolean {
+        return (this as? ConnectivityProvider.NetworkState.ConnectedState)?.hasInternet == true
+    }
+
+    private fun configureEditText() {
+        suggestionsAdapter = SuggestionsAdapter(rootView.context, android.R.layout.simple_list_item_1, this)
+        rootView.searchEditText.setAdapter(suggestionsAdapter)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -56,18 +84,31 @@ class SearchFragment : Fragment(), View.OnClickListener,
         setObserver()
     }
 
+    private fun search(){
+        hideKeyBoard()
+        rootView.searchEditText.clearFocus()
+        viewModel.fetchSearchList(rootView.searchEditText.text.toString().trim())
+    }
+
     private fun setEditTextListener() {
+        rootView.searchEditTextClear.setOnClickListener {
+            rootView.searchEditText.editableText.clear()
+        }
+        rootView.searchEditText.setOnItemClickListener { parent, view, position, id ->
+            search()
+        }
         rootView.searchEditText.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH || event.action == KeyEvent.ACTION_DOWN) {
-                hideKeyBoard()
-                rootView.searchEditText.clearFocus()
-                viewModel.fetchSearchList(v.text.toString().trim())
+                search()
                 return@OnEditorActionListener true
             }
             false
         })
     }
 
+    private fun setEditTextFocus() {
+        rootView.searchEditText.requestFocus()
+    }
 
     private fun setOnClickListeners() {
         rootView.backButton.setOnClickListener(this)
@@ -90,66 +131,46 @@ class SearchFragment : Fragment(), View.OnClickListener,
 
     }
 
-    private fun getSpanCount(): Int {
-        val orientation = resources.configuration.orientation
-        return if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            5
-        } else {
-            3
-        }
-    }
-
     private fun setObserver() {
-
+        viewModel.suggestionsList.observe(viewLifecycleOwner, Observer {
+            suggestionsAdapter.setResults(it)
+        })
 
         viewModel.loadingModel.observe(viewLifecycleOwner, Observer {
-            if (it.isListEmpty) {
-                if (it.loading == CommonViewModel2.Loading.LOADING) rootView.loading.visibility =
-                    View.VISIBLE
-                //TODO Error Visibiity GONE
+            if(it == null){
+                setEditTextFocus()
+                showKeyBoard()
+            }else{
+                when(it.loading){
+                    CommonViewModel2.Loading.COMPLETED -> {
+                        rootView.loading.visibility = View.GONE
+                        if(it.isListEmpty){
+                            setEditTextFocus()
+                            showKeyBoard()
+                        }else{
+                            hideKeyBoard()
+                        }
+                    }
+                    CommonViewModel2.Loading.ERROR -> {
+                        rootView.loading.visibility = View.GONE
+                        Snackbar.make(
+                            rootView,
+                            getString(it.errorMsg),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+                    CommonViewModel2.Loading.LOADING -> {
+                        if(it.isListEmpty) rootView.loading.visibility = View.VISIBLE
+                    }
 
-                else if (it.loading == CommonViewModel2.Loading.ERROR
-                //Todo Error visisblity visible
-                ) rootView.loading.visibility = View.GONE
-            } else {
+                }
                 searchController.setData(
                     viewModel.searchList.value,
                     it.loading == CommonViewModel2.Loading.LOADING
                 )
-                if (it.loading == CommonViewModel2.Loading.ERROR) view?.let { it1 ->
-                    Snackbar.make(
-                        it1,
-                        getString(it.errorMsg),
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-                else if (it.loading == CommonViewModel2.Loading.COMPLETED) rootView.loading.visibility =
-                    View.GONE
-
             }
-
         })
 
-//        viewModel.searchList.observe(viewLifecycleOwner, Observer {
-//            searchController.setData(it ,viewModel.isLoading.value?.isLoading ?: false)
-//            if(!it.isNullOrEmpty()){
-//                hideKeyBoard()
-//            }
-//        })
-//
-//
-//        viewModel.isLoading.observe( viewLifecycleOwner, Observer {
-//            if(it.isLoading){
-//                if(it.isListEmpty){
-//                    rootView.loading.visibility =  View.VISIBLE
-//                }else{
-//                    rootView.loading.visibility = View.GONE
-//                }
-//            }else{
-//               rootView.loading.visibility = View.GONE
-//            }
-//            searchController.setData(viewModel.searchList.value, it.isLoading)
-//        })
     }
 
     override fun onClick(v: View?) {
@@ -174,7 +195,7 @@ class SearchFragment : Fragment(), View.OnClickListener,
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                     && firstVisibleItemPosition >= 0
                 ) {
-                    if (isNetworkAvailable()) {
+                    if (isNetworkAvailable) {
                         viewModel.fetchNextPage()
                     } else {
                         Snackbar.make(
@@ -206,12 +227,8 @@ class SearchFragment : Fragment(), View.OnClickListener,
         )
     }
 
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = activity?.getSystemService(Context.CONNECTIVITY_SERVICE)
-        return if (connectivityManager is ConnectivityManager) {
-            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
-            networkInfo?.isConnected ?: false
-        } else false
+    override fun findSuggestions(hint: String, newQuery: Boolean) {
+        if(newQuery) viewModel.fetchSuggestionsList(hint)
+        else suggestionsAdapter.notifyDataSetChanged()
     }
-
 }

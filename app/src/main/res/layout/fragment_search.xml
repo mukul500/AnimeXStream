@@ -36,24 +36,40 @@
                 android:padding="10dp"
                 android:contentDescription="@string/back_button" />
 
-            <EditText
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/search_edit_text_background"
-                android:layout_gravity="center"
-                android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
-                android:textSize="22sp"
-                android:hint="@string/search"
-                android:paddingStart="20dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingEnd="20dp"
-                android:id="@+id/searchEditText"
-                android:imeOptions="actionSearch"
-                android:inputType="textCapWords"
-                android:autofillHints="One Piece" />
+                android:elevation="0dp"
+                android:layout_marginEnd="20dp"
+                android:layout_height="wrap_content">
 
+                <AutoCompleteTextView
+                    style="@style/Suggestions"
+                    android:paddingStart="20dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="40dp"
+                    android:paddingBottom="8dp"
+                    android:id="@+id/searchEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:autofillHints="One Piece"
+                    android:background="@drawable/search_edit_text_background"
+                    android:duplicateParentState="false"
+                    android:hint="@string/search"
+                    android:imeOptions="actionSearch"
+                    android:inputType="textCapWords"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/searchEditTextClear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/suggestions_spacing"
+                    android:layout_gravity="end|center_vertical"
+                    android:background="@android:drawable/ic_delete" />
+
+            </FrameLayout>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
@@ -71,9 +87,7 @@
         android:paddingBottom="20dp"
         android:clipToPadding="false"
         />
-    <include
-        layout="@layout/loading"
-        />
 
+    <include layout="@layout/loading" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

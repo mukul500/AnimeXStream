@@ -8,10 +8,26 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/app_background</item>
         <item name="android:statusBarColor" tools:targetApi="23">@color/app_background</item>
+        <item name="android:starStyle">@android:style/Widget.AutoCompleteTextView</item>
+        <item name="android:dropDownListViewStyle">@style/SuggestionsListIem</item>
+    </style>
+    
+    
+
+    <style name="Suggestions" parent="@android:style/Widget.AutoCompleteTextView">
+        <item name="android:dropDownWidth"  tools:override="true">match_parent</item>
+        <item name="android:popupBackground"  tools:override="true">@color/app_background</item>
+        <item name="android:dropDownSelector" tools:override="true">@drawable/list_selector_background</item>
+        <item name="android:dropDownVerticalOffset" tools:override="true">@dimen/suggestions_spacing</item>
+    </style>
+
+    <style name="SuggestionsListIem" parent="@android:style/Widget.ListView">
+        <item name="android:divider">@color/suggestionDropDownDividerColor</item>
+        <item name="android:dividerHeight">1px</item>
+        <item name="android:itemBackground"  tools:override="true">@color/app_background</item>
     </style>
 
     <style name="VideoPlayer" parent="Theme.AppCompat.Light.NoActionBar">
-
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>

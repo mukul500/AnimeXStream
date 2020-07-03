@@ -58,4 +58,9 @@
     //Shimmer Background
     <color name="shimmer_background">#dddddd</color>
 
+    //Suggestion
+    <color name="suggestionDropDownDividerColor">#32000000</color>
+    <color name="suggestionDropDownPressed">#0FFFFFFF</color>
+    <color name="suggestionDropDownFocused">#0CFFFFFF</color>
+    <color name="suggestionDropDownNormal">#0AFFFFFF</color>
 </resources>
