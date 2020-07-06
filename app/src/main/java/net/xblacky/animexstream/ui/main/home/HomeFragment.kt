@@ -6,8 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -17,8 +16,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.main_activity.*
 import net.xblacky.animexstream.BuildConfig
 import net.xblacky.animexstream.MainActivity
 import net.xblacky.animexstream.R
@@ -34,6 +36,8 @@ class HomeFragment : Fragment(), View.OnClickListener, HomeController.EpoxyAdapt
     private lateinit var homeController: HomeController
     private var doubleClickLastTime = 0L
     private lateinit var viewModel: HomeViewModel
+    var bottomNavigationView: BottomNavigationView? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,6 +52,7 @@ class HomeFragment : Fragment(), View.OnClickListener, HomeController.EpoxyAdapt
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        bottomNavigationView = (activity as MainActivity).bottomBar
         viewModelObserver()
     }
 
@@ -58,6 +63,12 @@ class HomeFragment : Fragment(), View.OnClickListener, HomeController.EpoxyAdapt
         val homeRecyclerView = rootView.recyclerView
         homeRecyclerView.layoutManager = LinearLayoutManager(context)
         homeRecyclerView.adapter = homeController.adapter
+        homeRecyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) bottomNavigationView?.visibility = GONE
+                else bottomNavigationView?.visibility = VISIBLE
+            }
+        })
     }
 
     private fun viewModelObserver() {

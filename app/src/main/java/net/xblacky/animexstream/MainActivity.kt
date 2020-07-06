@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 //        }
         toggleDayNight()
         setContentView(R.layout.main_activity)
-        bottomNavigationView.setupWithNavController(container.findNavController())
+        bottomBar.setupWithNavController(container.findNavController())
     }
 
     private fun toggleDayNight() {
