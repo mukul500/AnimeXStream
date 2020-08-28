@@ -33,8 +33,8 @@ android {
         applicationId "net.xblacky.animexstream"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 5
-        versionName "0.2.1"
+        versionCode 7
+        versionName "0.2.3"
         vectorDrawables.useSupportLibrary = true
         archivesBaseName = "AnimexStream-v$versionName"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -67,7 +67,7 @@ android {
             include "x86", "armeabi-v7a", "arm64-v8a", "x86_64"
 
             // Specifies that we do not want to also generate a universal APK that includes all ABIs.
-            universalApk false
+            universalApk true
         }
     }
 
@@ -76,9 +76,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     testImplementation 'junit:junit:4.12'
@@ -124,13 +124,13 @@ dependencies {
     implementation 'com.ms-square:expandableTextView:0.1.4'
 
     //Navigation Library
-    def nav_version = "2.3.0-alpha04"
+    def nav_version = "2.3.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     //Firebase Analytics & Crashlytics
-    implementation 'com.google.firebase:firebase-analytics:17.2.3'
-    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta02'
-    implementation 'com.google.firebase:firebase-messaging:20.1.3'
-    implementation 'com.google.firebase:firebase-database-ktx:19.2.1'
+    implementation 'com.google.firebase:firebase-analytics:17.5.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.2.1'
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
+    implementation 'com.google.firebase:firebase-database-ktx:19.3.1'
 }
