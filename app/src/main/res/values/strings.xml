@@ -21,4 +21,8 @@
     <string name="removed_from_favourites">Anime removed from Favourites</string>
     <string name="see_more"><![CDATA[See more >]]></string>
     <string name="video_quality">Video Quality</string>
+    <string name="settings" translatable="false">Settings</string>
+    <string name="toggle_to_night_mode" translatable="false">Toggle to Night Mode</string>
+    <string name="toggle_to_light_mode" translatable="false">Toggle to Light Mode</string>
+    <string name="home" translatable="false">Home</string>
 </resources>
