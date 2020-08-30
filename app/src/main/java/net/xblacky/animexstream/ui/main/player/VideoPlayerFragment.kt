@@ -1,6 +1,8 @@
 package net.xblacky.animexstream.ui.main.player
 
 import android.content.Context
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.net.Uri
@@ -22,8 +24,6 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.MediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
-import com.google.android.exoplayer2.source.dash.DashMediaSource
-import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
 import com.google.android.exoplayer2.source.hls.HlsDataSourceFactory
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.trackselection.*
@@ -225,7 +225,6 @@ class VideoPlayerFragment : Fragment(), View.OnClickListener, Player.EventListen
         }
     }
 
-
     private fun toggleFullView() {
         if (isFullScreen) {
             exoPlayerFrameLayout.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
@@ -244,8 +243,15 @@ class VideoPlayerFragment : Fragment(), View.OnClickListener, Player.EventListen
         } else {
             exoPlayerFrameLayout.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
             exoPlayerView.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
-            player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
-            isFullScreen = true
+//            player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
+
+            if (player.videoScalingMode == C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING) {
+                player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT
+                isFullScreen = true
+            } else {
+                player.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
+            }
+
             context?.let {
                 exo_full_Screen.setImageDrawable(
                     ContextCompat.getDrawable(

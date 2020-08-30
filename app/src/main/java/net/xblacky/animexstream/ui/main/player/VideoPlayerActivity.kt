@@ -145,7 +145,6 @@ class VideoPlayerActivity : AppCompatActivity(), VideoPlayerListener {
 
         } else {
             finish()
-
         }
     }
 
@@ -154,6 +153,12 @@ class VideoPlayerActivity : AppCompatActivity(), VideoPlayerListener {
         newConfig: Configuration?
     ) {
         exoPlayerView.useController = !isInPictureInPictureMode
+        if (isInPictureInPictureMode) {
+            videoPlayerCardView.radius = 0f
+        } else {
+            val scale = resources.displayMetrics.density
+            videoPlayerCardView.radius = (8.0f * scale + 0.5f)
+        }
     }
 
     private fun hasPipPermission(): Boolean {
