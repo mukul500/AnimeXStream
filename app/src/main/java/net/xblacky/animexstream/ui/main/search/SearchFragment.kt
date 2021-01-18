@@ -75,9 +75,9 @@ class SearchFragment : Fragment(), View.OnClickListener,
 
     private fun setAdapters() {
         searchController = SearchController(this)
-        searchController.spanCount = Utils.calculateNoOfColumns(context!!, 150f)
+        searchController.spanCount = Utils.calculateNoOfColumns(requireContext(), 150f)
         rootView.searchRecyclerView.apply {
-            layoutManager = GridLayoutManager(context, Utils.calculateNoOfColumns(context!!, 150f))
+            layoutManager = GridLayoutManager(context, Utils.calculateNoOfColumns(requireContext(), 150f))
             adapter = searchController.adapter
             (layoutManager as GridLayoutManager).spanSizeLookup = searchController.spanSizeLookup
         }
