@@ -134,4 +134,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.2.4'
     implementation 'com.google.firebase:firebase-database-ktx:19.3.1'
     implementation 'com.google.firebase:firebase-config:19.2.0'
+
+    //Apache Commons
+    implementation 'org.apache.commons:commons-lang3:3.11'
 }

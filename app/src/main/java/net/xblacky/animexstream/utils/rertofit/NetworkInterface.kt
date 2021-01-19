@@ -3,10 +3,7 @@ package net.xblacky.animexstream.utils.rertofit
 import io.reactivex.Observable
 import net.xblacky.animexstream.utils.constants.C
 import okhttp3.ResponseBody
-import retrofit2.http.GET
-import retrofit2.http.HeaderMap
-import retrofit2.http.Query
-import retrofit2.http.Url
+import retrofit2.http.*
 
 class NetworkInterface {
 
@@ -95,6 +92,17 @@ class NetworkInterface {
             @HeaderMap header: Map<String, String>,
             @Query("keyword") keyword: String,
             @Query("page") page: Int
+        ): Observable<ResponseBody>
+    }
+
+    interface FetchM3u8Urlv2 {
+
+
+        @GET
+        fun get(
+
+            @Url url: String,
+            @Header("Referer") ref : String  =""
         ): Observable<ResponseBody>
     }
 

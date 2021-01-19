@@ -68,8 +68,9 @@ class VideoPlayerViewModel : CommonViewModel() {
                     val episodeInfo = HtmlParser.parseMediaUrl(response = response.string())
                     episodeInfo.vidcdnUrl?.let {
                         compositeDisposable.add(
-                            episodeRepository.fetchM3u8Url(episodeInfo.vidcdnUrl!!).subscribeWith(
-                                getEpisodeUrlObserver(C.TYPE_M3U8_URL)
+                            episodeRepository.fetchM3u8Url("https://gogo-stream.com/videos"+ _content.value?.episodeUrl).subscribeWith(
+                                getEpisodeUrlObserver(C.TYPE_M3U8_PREPROCESS_URL)
+
                             )
                         )
                     }
@@ -85,7 +86,19 @@ class VideoPlayerViewModel : CommonViewModel() {
                     _content.value = content
                     saveContent(content!!)
                     updateLoading(false)
-                }
+                }  else if (type == C.TYPE_M3U8_PREPROCESS_URL) {
+                    val m3u8Urlx = HtmlParser.getGoGoHLS(response = response.string())
+                    val content = _content.value
+                    content?.referer = m3u8Urlx!!.replace("amp;","").replace("streaming","loadserver")
+                    _content.value = content
+                    saveContent(content!!)
+                    compositeDisposable.add(
+                        episodeRepository.fetchM3u8Urlv2(m3u8Urlx!!.replace("amp;","").replace("streaming","loadserver"),m3u8Urlx!!.replace("amp;","").replace("////","//")).subscribeWith(
+                            getEpisodeUrlObserver(C.TYPE_M3U8_URL)
+
+
+                        )
+                    )}
 
             }
 

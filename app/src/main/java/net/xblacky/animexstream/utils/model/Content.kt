@@ -19,5 +19,8 @@ open class Content(
     var watchedDuration: Long = 0,
     @Ignore
     var duration: Long = 0,
-    var insertionTime: Long = 0
+    var insertionTime: Long = 0,
+    @Ignore
+    var referer: String?=""
+
 ): RealmObject()

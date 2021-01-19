@@ -41,6 +41,7 @@ class C {
         //Episode URL Type
         const val TYPE_MEDIA_URL = 100
         const val TYPE_M3U8_URL = 101
+        const val TYPE_M3U8_PREPROCESS_URL = 102
 
         //Anime Info URL Type
         const val TYPE_ANIME_INFO = 1000
